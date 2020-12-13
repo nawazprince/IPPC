@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -22,7 +23,26 @@ namespace Demo
             {
                 lblPc.Text ="PC: "+ GetPcName();
                 lblIp.Text = "IP: " + GetIp();
-                lblMac.Text = "MAC: " + GetMACAddress();
+                lblMac.Text = "Ethernet MAC: " + GetMACAddress();
+                lblWirelessMac.Text = "Wireless lan adapter wifi mac: " + Mac();
+
+                //int loop1, loop2;
+                //NameValueCollection coll;
+
+                //// Load ServerVariable collection into NameValueCollection object.
+                //coll = Request.ServerVariables;
+                //// Get names of all keys into a string array.
+                //String[] arr1 = coll.AllKeys;
+                //for (loop1 = 0; loop1 < arr1.Length; loop1++)
+                //{
+                //    Response.Write("Key: " + arr1[loop1] + "<br>");
+                //    String[] arr2 = coll.GetValues(arr1[loop1]);
+                //    for (loop2 = 0; loop2 < arr2.Length; loop2++)
+                //    {
+                //        Response.Write("Value " + loop2 + ": " + Server.HtmlEncode(arr2[loop2]) + "<br>");
+                //    }
+                //}
+
             }
         }
         public static string GetIp()
@@ -31,18 +51,25 @@ namespace Demo
         }
         public static string GetPcName()
         {
+            string cn = "";
             try
             {
-                //string[] computer_name = System.Net.Dns.GetHostEntry(System.Web.HttpContext.Current.Request.ServerVariables["remote_addr"]).HostName.Split(new Char[] { '.' });
-                string[] computer_name = System.Net.Dns.GetHostEntry(
-                       System.Web.HttpContext.Current.Request.ServerVariables["LOCAL_ADDR"]).HostName.Split(new Char[] { '.' });
-                string cn = computer_name[0].ToString();
-                return cn;
+                //IPAddress myIP = IPAddress.Parse(GetIp());
+                //IPHostEntry GetIPHost = Dns.GetHostEntry(myIP);
+                //List<string> compName = GetIPHost.HostName.ToString().Split('.').ToList();
+                //string mycompNameRemote = compName[0];
+                //return mycompNameRemote;
+                //string[] computer_name = System.Net.Dns.GetHostEntry(
+                //       System.Web.HttpContext.Current.Request.ServerVariables["LOCAL_ADDR"]).HostName.Split(new Char[] { '.' });
+
+                string[] computer_name = System.Net.Dns.GetHostEntry(System.Web.HttpContext.Current.Request.ServerVariables["remote_addr"]).HostName.Split(new Char[] { '.' });
+                 cn = computer_name[0].ToString();
             }
             catch
             {
-                return Dns.GetHostName();
+                cn= Dns.GetHostName();
             }
+            return cn;
         }
         public string GetMACAddress()
         {
@@ -58,7 +85,7 @@ namespace Demo
             }
             return sMacAddress;
         }
-        public void Mac()
+        public string Mac()
         {
             try
             {
@@ -70,14 +97,14 @@ namespace Demo
                 Int32 len = 6;
                 int res = SendARP(ldest, 0, ref macinfo, ref len);
                 string mac_src = macinfo.ToString("X");
-                if (mac_src == "0")
-                {
-                    if (userip == "127.0.0.1")
-                        Response.Write("visited Localhost!");
-                    else
-                        Response.Write("the IP from " + userip + "" + "<br>");
-                    return;
-                }
+                //if (mac_src == "0")
+                //{
+                //    if (userip == "127.0.0.1")
+                //        Response.Write("visited Localhost!");
+                //    else
+                //        Response.Write("the IP from " + userip + "" + "<br>");
+                //    return;
+                //}
 
                 while (mac_src.Length < 12)
                 {
@@ -101,13 +128,12 @@ namespace Demo
                     }
                 }
 
-                Response.Write("welcome, IP " + userip + "<br>" + ",the wireless lan adapter mac address is " + mac_dest + "."
-
-                 + "<br>");
+                
+                return mac_dest;
             }
             catch (Exception err)
             {
-                Response.Write(err.Message);
+                return err.Message;
             }
         }
 

@@ -96,3 +96,4 @@ D:\VSProject\Projects\Demo\Demo\bin\Demo.pdb
 D:\VSProject\Projects\Demo\Demo\obj\Debug\Demo.csprojResolveAssemblyReference.cache
 D:\VSProject\Projects\Demo\Demo\obj\Debug\Demo.dll
 D:\VSProject\Projects\Demo\Demo\obj\Debug\Demo.pdb
+D:\VSProject\Projects\Demo\Demo\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
